@@ -84,7 +84,7 @@ def makeBatchSubmission(code):
 	headers = {
 		'content-type': 'application/json',
 		'Content-Type': 'application/json',
-		"X-RapidAPI-Key": "83758d9391msh1eae830eea126bdp1cdcc6jsn3c5dde0aa62c",
+		"X-RapidAPI-Key": X_RAPIDAPI_KEY,
 		"X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
 	}
 	# Convert payload to JSON string
@@ -115,7 +115,7 @@ def getSubmission(token):
 	querystring = {"base64_encoded": "true", "fields": "*"}
 
 	headers = {
-		"X-RapidAPI-Key": "83758d9391msh1eae830eea126bdp1cdcc6jsn3c5dde0aa62c",
+		"X-RapidAPI-Key": X_RAPIDAPI_KEY,
 		"X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
 	}
 
