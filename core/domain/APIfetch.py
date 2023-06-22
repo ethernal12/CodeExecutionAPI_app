@@ -24,40 +24,19 @@ def getLanguages():
 
 	response = requests.get(url, headers=headers)
 
-	print(response.json())
-
-
-def makeSubmission(code):
-	# Zakodiraj na base64
-
-	url = "https://judge0-ce.p.rapidapi.com/submissions"
-
-	querystring = {"base64_encoded": "True", "fields": "*"}
-
-	payload = {
-		"language_id": 71,
-		"source_code": code,
-		"stdin": "1 2 3 4 5\n"
-	}
-	headers = {
-		'content-type': 'application/json',
-		'Content-Type': 'application/json',
-		"X-RapidAPI-Key": X_RAPIDAPI_KEY,
-		"X-RapidAPI-Host": X_RAPIDAPI_HOST
-	}
-
-
-	response = requests.post(url, json=payload, headers=headers, params=querystring)
-
-	if response.status_code == 201:
-
-		token = response.json()['token']
-		return getSubmission(token)
-	else:
-		print("Failed to create submission.")
+	return response.json()
 
 
 def makeBatchSubmission(code):
+	liste_prog_jezikov = getLanguages()
+	izbrani_prog_jezik = 'Python (3.8.1)'
+
+	id_prog_jezika = ''
+	for language in liste_prog_jezikov:
+		if language['name'].startswith(izbrani_prog_jezik):
+			id_prog_jezika = language['id']
+			break
+
 	naloga = 'Naloga 1'
 	dobiInputeNaloge = core.utils.extract_cases(naloga, 'Input')
 
@@ -67,17 +46,17 @@ def makeBatchSubmission(code):
 
 	payload = {"submissions": [
 		{
-			"language_id": 71,
+			"language_id": id_prog_jezika,
 			"source_code": code,
 			"stdin": dobiInputeNaloge[0]
 		},
 		{
-			"language_id": 71,
+			"language_id": id_prog_jezika,
 			"source_code": code,
 			"stdin": dobiInputeNaloge[1]
 		},
 		{
-			"language_id": 71,
+			"language_id": id_prog_jezika,
 			"source_code": code,
 			"stdin": dobiInputeNaloge[2]
 		}
@@ -100,6 +79,7 @@ def makeBatchSubmission(code):
 				token = item['token']
 				# sem probal sekundo timeout ampak je premalo, prvi output ni nikoli procesiran
 				time.sleep(2)
+				# vrni output kode ucenca
 				result = getSubmission(token)
 				con_res = utils.removeNewLine(result)
 				results.append(con_res)

@@ -38,6 +38,8 @@ class Ui_CEAA(QtWidgets.QMainWindow):
 	def APIfetch(self):
 		# dobi kodo iz text inputa in pretvori v tekst
 		code = self.codingTE.toPlainText()
+		response = APIfetch.makeBatchSubmission(code)
+		print(response)
 		try:
 			responses = APIfetch.makeBatchSubmission(code)
 			with open('../core/responsi.txt', 'w') as file:
@@ -49,7 +51,7 @@ class Ui_CEAA(QtWidgets.QMainWindow):
 			subprocess.run(command, shell=True)
 		except Exception as e:
 			print(f"Napaka v sintaksi kode: {str(e)}")
-	#
+
 	# if match == -1:
 	# 	# Set green background for all labels
 	# 	self.set_label_background_color(self.test1LB, QColor("green"))
