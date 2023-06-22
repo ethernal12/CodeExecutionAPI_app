@@ -21,5 +21,5 @@ class Test_api_output(unittest.TestCase):
 		if self.napake:
 			self.fail('\n'.join(self.napake))
 
-		if __name__ == '__main__':
-			unittest.main()
+if __name__ == '__main__':
+	unittest.main()
