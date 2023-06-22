@@ -28,7 +28,7 @@ def getLanguages():
 
 
 def makeSubmission(code):
-	# Encode the code using base64
+	# Zakodiraj na base64
 
 	url = "https://judge0-ce.p.rapidapi.com/submissions"
 
@@ -45,18 +45,16 @@ def makeSubmission(code):
 		"X-RapidAPI-Key": X_RAPIDAPI_KEY,
 		"X-RapidAPI-Host": X_RAPIDAPI_HOST
 	}
-	# Convert payload to JSON string
+
 
 	response = requests.post(url, json=payload, headers=headers, params=querystring)
 
-	# Check the response status
 	if response.status_code == 201:
-		# get the token created from post response and get the code output
+
 		token = response.json()['token']
 		return getSubmission(token)
 	else:
 		print("Failed to create submission.")
-		print(f"Response: {response.text}")
 
 
 def makeBatchSubmission(code):
@@ -110,7 +108,6 @@ def makeBatchSubmission(code):
 			print("Failed to create submission.")
 
 	except requests.exceptions.RequestException as e:
-		# Handle the exception
 		print("Pojavila se je napaka:", str(e))
 
 
