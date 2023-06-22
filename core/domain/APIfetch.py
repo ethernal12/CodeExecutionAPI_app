@@ -1,17 +1,20 @@
 import base64
 import binascii
+import os
 import time
 
 import requests
+from dotenv import load_dotenv
 
 import core.utils
-from dotenv import load_dotenv
-import os
+from core import utils
 
 load_dotenv()
+X_RAPIDAPI_KEY = os.environ['X_RAPIDAPI_KEY']
+X_RAPIDAPI_HOST = os.environ['X_RAPIDAPI_HOST']
+
+
 def getLanguages():
-	X_RAPIDAPI_KEY = os.environ['X_RAPIDAPI_KEY']
-	X_RAPIDAPI_HOST = os.environ['X_RAPIDAPI_HOST']
 	url = "https://judge0-ce.p.rapidapi.com/languages"
 
 	headers = {
@@ -39,8 +42,8 @@ def makeSubmission(code):
 	headers = {
 		'content-type': 'application/json',
 		'Content-Type': 'application/json',
-		"X-RapidAPI-Key": "83758d9391msh1eae830eea126bdp1cdcc6jsn3c5dde0aa62c",
-		"X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
+		"X-RapidAPI-Key": X_RAPIDAPI_KEY,
+		"X-RapidAPI-Host": X_RAPIDAPI_HOST
 	}
 	# Convert payload to JSON string
 
@@ -57,8 +60,8 @@ def makeSubmission(code):
 
 
 def makeBatchSubmission(code):
-	task = 'Task 1'
-	extractCases = core.utils.extract_cases(task)
+	naloga = 'Naloga 1'
+	dobiInputeNaloge = core.utils.extract_cases(naloga, 'Input')
 
 	url = "https://judge0-ce.p.rapidapi.com/submissions/batch"
 
@@ -68,46 +71,47 @@ def makeBatchSubmission(code):
 		{
 			"language_id": 71,
 			"source_code": code,
-			"stdin": core.utils.convert_to_string(extractCases[0])
+			"stdin": dobiInputeNaloge[0]
 		},
 		{
 			"language_id": 71,
 			"source_code": code,
-			"stdin": core.utils.convert_to_string(extractCases[1])
+			"stdin": dobiInputeNaloge[1]
 		},
 		{
 			"language_id": 71,
 			"source_code": code,
-			"stdin": core.utils.convert_to_string(extractCases[2])
+			"stdin": dobiInputeNaloge[2]
 		}
 	]}
 	headers = {
 		'content-type': 'application/json',
 		'Content-Type': 'application/json',
-		"X-RapidAPI-Key": "83758d9391msh1eae830eea126bdp1cdcc6jsn3c5dde0aa62c",
-		"X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
+		"X-RapidAPI-Key": X_RAPIDAPI_KEY,
+		"X-RapidAPI-Host": X_RAPIDAPI_HOST
 	}
-	# Convert payload to JSON string
 
-	response = requests.post(url, json=payload, headers=headers, params=querystring)
+	try:
+		response = requests.post(url, json=payload, headers=headers, params=querystring)
+		response.raise_for_status()  # za ne-2xx statusne napake
 
-	# Check the response status
-	if response.status_code == 201:
-		# get the token created from post response and get the code output
-		response_data = response.json()
-		results = []  # Create an empty list to store the results
+		if response.status_code == 201:
+			response_data = response.json()
+			results = []
+			for item in response_data:
+				token = item['token']
+				# sem probal sekundo timeout ampak je premalo, prvi output ni nikoli procesiran
+				time.sleep(2)
+				result = getSubmission(token)
+				con_res = utils.removeNewLine(result)
+				results.append(con_res)
+			return results
+		else:
+			print("Failed to create submission.")
 
-		for item in response_data:
-			token = item['token']
-			time.sleep(2)
-			result = getSubmission(token)
-			results.append(result)  # Store the result in the list
-
-		return results  # Return the list of results after the loop
-
-	else:
-		print("Failed to create submission.")
-		print(f"Response: {response.text}")
+	except requests.exceptions.RequestException as e:
+		# Handle the exception
+		print("Pojavila se je napaka:", str(e))
 
 
 def getSubmission(token):
@@ -115,8 +119,8 @@ def getSubmission(token):
 	querystring = {"base64_encoded": "true", "fields": "*"}
 
 	headers = {
-		"X-RapidAPI-Key": "83758d9391msh1eae830eea126bdp1cdcc6jsn3c5dde0aa62c",
-		"X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
+		"X-RapidAPI-Key": X_RAPIDAPI_KEY,
+		"X-RapidAPI-Host": X_RAPIDAPI_HOST
 	}
 
 	response = requests.get(url, headers=headers, params=querystring)
@@ -124,11 +128,12 @@ def getSubmission(token):
 
 		try:
 			decoded_output = base64.b64decode(response.json()['stdout']).decode('utf-8')
+
 			return decoded_output
 		except binascii.Error as e:
 			print(f"Error decoding base64: {e}")
-			return None  # Handle the error case appropriately
-
+			return None
+	# če je napaka v sintaksi
 	elif response.json()['stderr']:
 		stderr = base64.b64decode(response.json()['stderr']).decode('utf-8')
-		return stderr
+		raise Exception(stderr)
