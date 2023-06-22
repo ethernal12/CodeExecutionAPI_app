@@ -8,7 +8,7 @@ class Test_api_output(unittest.TestCase):
 		self.resitev = 'Resitev 1'
 		self.dobiOutputUcenca = utils.extract_output()
 		self.resitveNalog = utils.extract_cases(self.resitev, "Output")
-		self.failures = []
+		self.napake = []
 
 	def test_response(self):
 		for i, (response, expected_response) in enumerate(zip(self.dobiOutputUcenca, self.resitveNalog), start=1):
@@ -16,10 +16,10 @@ class Test_api_output(unittest.TestCase):
 				self.assertEqual(response, expected_response)
 				print(f"Assertion {i} passed.")
 			except AssertionError:
-				failure = f"Assertion {i} failed: {response} != {expected_response}"
-				self.failures.append(failure)
-		if self.failures:
-			self.fail('\n'.join(self.failures))
+				napaka = f"Assertion {i} failed: {response} != {expected_response}"
+				self.napake.append(napaka)
+		if self.napake:
+			self.fail('\n'.join(self.napake))
 
 		if __name__ == '__main__':
 			unittest.main()
