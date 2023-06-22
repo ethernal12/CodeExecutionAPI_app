@@ -48,7 +48,7 @@ class Ui_CEAA(QtWidgets.QMainWindow):
 			print('uspešno vrnil API response, poganjam teste...')
 			subprocess.run(command, shell=True)
 		except Exception as e:
-			print(f"Napaka sintaksi kode: {str(e)}")
+			print(f"Napaka v sintaksi kode: {str(e)}")
 	#
 	# if match == -1:
 	# 	# Set green background for all labels
