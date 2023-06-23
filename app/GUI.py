@@ -38,10 +38,9 @@ class Ui_CEAA(QtWidgets.QMainWindow):
 	def APIfetch(self):
 		# dobi kodo iz text inputa in pretvori v tekst
 		code = self.codingTE.toPlainText()
-		response = APIfetch.makeBatchSubmission(code)
-		print(response)
 		try:
 			responses = APIfetch.makeBatchSubmission(code)
+			print(responses, 'response from gui')
 			with open('../core/responsi.txt', 'w') as file:
 				for response in responses:
 					file.write(response + '\n')
@@ -52,27 +51,28 @@ class Ui_CEAA(QtWidgets.QMainWindow):
 		except Exception as e:
 			print(f"Napaka v sintaksi kode: {str(e)}")
 
-	# if match == -1:
-	# 	# Set green background for all labels
-	# 	self.set_label_background_color(self.test1LB, QColor("green"))
-	# 	self.set_label_background_color(self.test2LB, QColor("green"))
-	# 	self.set_label_background_color(self.test3LB, QColor("green"))
-	# elif match:
-	# 	if 0 in match:
-	#
-	# 		self.set_label_background_color(self.test1LB, QColor("red"))
-	# 	else:
-	# 		self.set_label_background_color(self.test1LB, QColor("green"))
-	# 	if 1 in match:
-	#
-	# 		self.set_label_background_color(self.test2LB, QColor("red"))
-	# 	else:
-	# 		self.set_label_background_color(self.test2LB, QColor("green"))
-	# 	if 2 in match:
-	#
-	# 		self.set_label_background_color(self.test3LB, QColor("red"))
-	# 	else:
-	# 		self.set_label_background_color(self.test3LB, QColor("green"))
+
+# if match == -1:
+# 	# Set green background for all labels
+# 	self.set_label_background_color(self.test1LB, QColor("green"))
+# 	self.set_label_background_color(self.test2LB, QColor("green"))
+# 	self.set_label_background_color(self.test3LB, QColor("green"))
+# elif match:
+# 	if 0 in match:
+#
+# 		self.set_label_background_color(self.test1LB, QColor("red"))
+# 	else:
+# 		self.set_label_background_color(self.test1LB, QColor("green"))
+# 	if 1 in match:
+#
+# 		self.set_label_background_color(self.test2LB, QColor("red"))
+# 	else:
+# 		self.set_label_background_color(self.test2LB, QColor("green"))
+# 	if 2 in match:
+#
+# 		self.set_label_background_color(self.test3LB, QColor("red"))
+# 	else:
+# 		self.set_label_background_color(self.test3LB, QColor("green"))
 
 
 if __name__ == "__main__":

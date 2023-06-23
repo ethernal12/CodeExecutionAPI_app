@@ -1,5 +1,3 @@
-import base64
-import binascii
 import os
 import time
 
@@ -7,7 +5,6 @@ import requests
 from dotenv import load_dotenv
 
 import core.utils
-from core import utils
 
 load_dotenv()
 X_RAPIDAPI_KEY = os.environ['X_RAPIDAPI_KEY']
@@ -15,19 +12,25 @@ X_RAPIDAPI_HOST = os.environ['X_RAPIDAPI_HOST']
 
 
 def getLanguages():
+	print('--------------------------------------------------get language id')
 	url = "https://judge0-ce.p.rapidapi.com/languages"
 
 	headers = {
 		"X-RapidAPI-Key": X_RAPIDAPI_KEY,
 		"X-RapidAPI-Host": X_RAPIDAPI_HOST
 	}
+	try:
+		response = requests.get(url, headers=headers)
+		response.raise_for_status()
 
-	response = requests.get(url, headers=headers)
+	except requests.exceptions.RequestException as e:
+		print("Pojavila se je napaka:", str(e))
 
 	return response.json()
 
 
 def makeBatchSubmission(code):
+	print('--------------------------------------------------make batched submission')
 	liste_prog_jezikov = getLanguages()
 	izbrani_prog_jezik = 'Python (3.8.1)'
 
@@ -74,15 +77,15 @@ def makeBatchSubmission(code):
 
 		if response.status_code == 201:
 			response_data = response.json()
-			results = []
-			for item in response_data:
-				token = item['token']
-				# sem probal sekundo timeout ampak je premalo, prvi output ni nikoli procesiran
-				time.sleep(2)
-				# vrni output kode ucenca
-				result = getSubmission(token)
-				con_res = utils.removeNewLine(result)
-				results.append(con_res)
+			tokens = []
+
+			for response in response_data:
+				tokens.append(response['token'])
+			token_string_list = ','.join(tokens)
+			# če grem na 3 sekunde, dobim vsake tolk časa status processing ali pa queued na submissions:(
+			time.sleep(4)
+			results = getBatchedSubmission(token_string_list)
+
 			return results
 		else:
 			print("Failed to create submission.")
@@ -91,26 +94,42 @@ def makeBatchSubmission(code):
 		print("Pojavila se je napaka:", str(e))
 
 
-def getSubmission(token):
-	url = f"https://judge0-ce.p.rapidapi.com/submissions/{token}"
-	querystring = {"base64_encoded": "true", "fields": "*"}
+def getBatchedSubmission(tokens):
+	print('--------------------------------------------------get batched submission')
+	url = "https://judge0-ce.p.rapidapi.com/submissions/batch"
+
+	querystring = {
+		"tokens": tokens,
+		"base64_encoded": "True", "fields": "*"}
 
 	headers = {
 		"X-RapidAPI-Key": X_RAPIDAPI_KEY,
 		"X-RapidAPI-Host": X_RAPIDAPI_HOST
 	}
 
-	response = requests.get(url, headers=headers, params=querystring)
-	if response.json()['stdout']:
+	try:
+		response = requests.get(url, headers=headers, params=querystring)
+		response.raise_for_status()
+		response_data = response.json()
+		print(response_data, 'res')
+		code_outputs = []
 
-		try:
-			decoded_output = base64.b64decode(response.json()['stdout']).decode('utf-8')
+		for submission in response_data['submissions']:
+			if submission['stdout']:
+				outputs = ''.join(submission['stdout'])
+				code_outputs.append(outputs)
+			elif submission['stderr']:
+				stderr = submission['stderr']
+				raise Exception(stderr)
+			# če ni stout in ne stderr potem se koda še obdeluje
+			else:
+				status = submission["status"]
+				status_id = status["id"]
+				description = status["description"]
+				print("Status ID:", status_id)
+				print("Description:", description)
+		return code_outputs
+	# če uspešno dobimo nazaj outpute
+	except requests.exceptions.RequestException as e:
+		print("Pojavila se je napaka:", str(e))
 
-			return decoded_output
-		except binascii.Error as e:
-			print(f"Error decoding base64: {e}")
-			return None
-	# če je napaka v sintaksi
-	elif response.json()['stderr']:
-		stderr = base64.b64decode(response.json()['stderr']).decode('utf-8')
-		raise Exception(stderr)
