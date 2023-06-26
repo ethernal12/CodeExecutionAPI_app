@@ -6,7 +6,7 @@ from pathlib import Path
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtWidgets import QLabel, QTextEdit, QPushButton
 
-from core.domain import APIfetch
+from core.domain import APIfetch, AWSLambda, tio
 
 sys.path.append(os.getcwd())
 
@@ -35,6 +35,13 @@ class Ui_CEAA(QtWidgets.QMainWindow):
 		palette.setColor(label.backgroundRole(), color)
 		label.setPalette(palette)
 
+	def aws_lambda(self):
+		print('aws lambda')
+		AWSLambda.invoke_lambda_function()
+
+	def run_tio(self):
+		tio.run_tio()
+
 	def APIfetch(self):
 		# dobi kodo iz text inputa in pretvori v tekst
 		code = self.codingTE.toPlainText()
@@ -45,9 +52,9 @@ class Ui_CEAA(QtWidgets.QMainWindow):
 				for response in responses:
 					file.write(response + '\n')
 			# Zazeni teste
-			command = "python -m unittest discover tests"
-			print('uspešno vrnil API response, poganjam teste...')
-			subprocess.run(command, shell=True)
+			# command = "python -m unittest discover tests"
+			# print('uspešno vrnil API response, poganjam teste...')
+			# subprocess.run(command, shell=True)
 		except Exception as e:
 			print(f"Napaka v sintaksi kode: {str(e)}")
 
