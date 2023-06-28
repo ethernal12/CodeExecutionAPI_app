@@ -31,6 +31,7 @@ def getLanguages():
 
 def makeBatchSubmission(code):
 	print('--------------------------------------------------make batched submission')
+
 	# liste_prog_jezikov = getLanguages()
 	# izbrani_prog_jezik = 'Python (3.8.1)'
 	#
@@ -59,111 +60,14 @@ def makeBatchSubmission(code):
 		{
 			"language_id": id_prog_jezika,
 			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
+			"stdin": dobiInputeNaloge[1],
+			"expected_output": dobiResitveNaloge[1],
 		},
 		{
 			"language_id": id_prog_jezika,
 			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
-
-		},
-		{
-			"language_id": id_prog_jezika,
-			"source_code": code,
-			"stdin": dobiInputeNaloge[0],
-			"expected_output": dobiResitveNaloge[0],
+			"stdin": dobiInputeNaloge[2],
+			"expected_output": dobiResitveNaloge[2],
 		}
 	]}
 	headers = {

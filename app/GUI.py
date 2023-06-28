@@ -59,28 +59,6 @@ class Ui_CEAA(QtWidgets.QMainWindow):
 			print(f"Napaka v sintaksi kode: {str(e)}")
 
 
-# if match == -1:
-# 	# Set green background for all labels
-# 	self.set_label_background_color(self.test1LB, QColor("green"))
-# 	self.set_label_background_color(self.test2LB, QColor("green"))
-# 	self.set_label_background_color(self.test3LB, QColor("green"))
-# elif match:
-# 	if 0 in match:
-#
-# 		self.set_label_background_color(self.test1LB, QColor("red"))
-# 	else:
-# 		self.set_label_background_color(self.test1LB, QColor("green"))
-# 	if 1 in match:
-#
-# 		self.set_label_background_color(self.test2LB, QColor("red"))
-# 	else:
-# 		self.set_label_background_color(self.test2LB, QColor("green"))
-# 	if 2 in match:
-#
-# 		self.set_label_background_color(self.test3LB, QColor("red"))
-# 	else:
-# 		self.set_label_background_color(self.test3LB, QColor("green"))
-
 
 if __name__ == "__main__":
 	import sys
